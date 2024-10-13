@@ -19,6 +19,7 @@ def browser(request):
     browser_name = request.config.getoption("--browser", default="chrome")
 
     driver = BROWSERS.get(browser_name)()
+    driver.implicitly_wait(1)
     yield driver
 
     driver.quit()
