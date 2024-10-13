@@ -56,9 +56,10 @@ def test_catalog(browser, url, locator, selector, endpoint):
         ('desktops/apple-cinema', By.TAG_NAME,'h1'),
         ('desktops/canon-eos-5d', By.XPATH,'//span[@class="price-new"]'),
         ('desktops/htc-touch-hd', By.XPATH,'//div[@id="tab-description"]//p[1]'),
-        ('cameras/canon-eos-5d', By.XPATH,'//div[@id="tab-description"]//p[1]'),
+        ('cameras/canon-eos-5d', By.XPATH,'//button[@class="btn btn-light"]'),
+        ('cameras/nikon-d300', By.XPATH,'//button[@id="button-cart"]'),
     ],
-    ids=['Название товара','Цена товара','Описание товара','Добавить в избранное']
+    ids=['Title','Price','Description','In like', 'Add to cart']
 )
 def test_cart(browser, url, locator, selector, endpoint):
     """Тесты для поиска элементов в карточке товара"""
