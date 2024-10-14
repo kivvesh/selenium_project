@@ -6,14 +6,6 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 
-def test_ui(browser, url):
-    browser.get(url)
-
-    coockies = browser.get_cookie('_ym_d')
-    print(coockies)
-    time.sleep(10)
-
-
 @pytest.mark.find_element
 @pytest.mark.parametrize(
     'locator,selector,time_wait',
@@ -25,8 +17,10 @@ def test_ui(browser, url):
         (By.CSS_SELECTOR,'div.row.row-cols-1.row-cols-sm-2.row-cols-md-3.row-cols-xl-4',3)
     ]
 )
-def test_main_page(browser, url, locator, selector, time_wait):
+def test_main_page(browser, url, locator, selector, time_wait, my_loger):
     """Тесты для поиска элементов главной странице"""
+
+    my_loger.log_info(test_main_page.__doc__)
     browser.get(url)
     try:
         element = WebDriverWait(browser, time_wait).until(
@@ -34,7 +28,7 @@ def test_main_page(browser, url, locator, selector, time_wait):
         )
         assert element
     except Exception as error:
-        print(error)
+        my_loger.log_error(error)
 
 
 @pytest.mark.find_element
@@ -48,15 +42,16 @@ def test_main_page(browser, url, locator, selector, time_wait):
         ('desktops/mac', By.XPATH,'//a[@class="btn btn-primary d-block"]',3),
     ]
 )
-def test_catalog(browser, url, locator, selector, endpoint,time_wait):
+def test_catalog(browser, url, locator, selector, endpoint,time_wait, my_loger):
     """Тесты для поиска элементов в каталоге"""
+    my_loger.log_info(test_catalog.__doc__)
     browser.get(f'{url}/en-gb/catalog/{endpoint}')
     try:
         elements = WebDriverWait(browser, time_wait).until(
             EC.presence_of_all_elements_located((locator, selector)))
         assert elements
     except Exception as error:
-        print(error)
+        my_loger.log_error(error)
 
 
 
@@ -72,8 +67,9 @@ def test_catalog(browser, url, locator, selector, endpoint,time_wait):
     ],
     ids=['Title','Price','Description','In like', 'Add to cart']
 )
-def test_cart(browser, url, locator, selector, endpoint, time_wait):
+def test_cart(browser, url, locator, selector, endpoint, time_wait, my_loger):
     """Тесты для поиска элементов в карточке товара"""
+    my_loger.log_info(test_cart.__doc__)
     browser.get(f'{url}/en-gb/product/{endpoint}')
     try:
         element = WebDriverWait(browser, time_wait).until(
@@ -81,7 +77,7 @@ def test_cart(browser, url, locator, selector, endpoint, time_wait):
         )
         assert element
     except Exception as error:
-        print(error)
+        my_loger.log_error(error)
 
 
 @pytest.mark.find_element
@@ -95,8 +91,9 @@ def test_cart(browser, url, locator, selector, endpoint, time_wait):
         (By.XPATH,'//footer[@id="footer"]/a',3),
     ]
 )
-def test_administration(browser, url, locator, selector, time_wait):
+def test_administration(browser, url, locator, selector, time_wait, my_loger):
     """Тесты для поиска элементов /administration"""
+    my_loger.log_info(test_administration.__doc__)
     browser.get(f'{url}/administration/')
     try:
         element = WebDriverWait(browser, time_wait).until(
@@ -104,7 +101,7 @@ def test_administration(browser, url, locator, selector, time_wait):
         )
         assert element
     except Exception as error:
-        print(error)
+        my_loger.log_error(error)
 
 
 @pytest.mark.find_element
@@ -119,8 +116,9 @@ def test_administration(browser, url, locator, selector, time_wait):
     ],
     ids=['firstname','lastname','email','column-right','button']
 )
-def test_register_user(browser, url, locator, selector, time_wait):
+def test_register_user(browser, url, locator, selector, time_wait, my_loger):
     """Тесты для поиска элементов /administration"""
+    my_loger.log_info(test_register_user.__doc__)
     browser.get(f'{url}index.php?route=account/register')
     try:
         element = WebDriverWait(browser, time_wait).until(
@@ -128,4 +126,4 @@ def test_register_user(browser, url, locator, selector, time_wait):
         )
         assert element
     except Exception as error:
-        print(error)
+        my_loger.log_error(error)
