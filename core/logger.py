@@ -36,10 +36,10 @@ class Logger:
             self.logger.addHandler(file_handler)
 
             #вывод в консоль
-            console_handler = logging.StreamHandler()
-            console_handler.setLevel(log_level)
-            console_handler.setFormatter(formatter)
-            self.logger.addHandler(console_handler)
+            # console_handler = logging.StreamHandler()
+            # console_handler.setLevel(log_level)
+            # console_handler.setFormatter(formatter)
+            # self.logger.addHandler(console_handler)
 
 
     def log_info(self, message):
