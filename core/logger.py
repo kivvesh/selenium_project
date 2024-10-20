@@ -41,7 +41,6 @@ class Logger:
             # console_handler.setFormatter(formatter)
             # self.logger.addHandler(console_handler)
 
-
     def log_info(self, message):
         self.logger.info(message)
 

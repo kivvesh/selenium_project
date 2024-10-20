@@ -28,6 +28,7 @@ def my_loger(request):
     my_logger.logger.setLevel(level)
     return loger
 
+
 @pytest.fixture(scope='session')
 def browser(request):
     browser_name = request.config.getoption("--browser", default="chrome")

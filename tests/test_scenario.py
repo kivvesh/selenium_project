@@ -13,6 +13,7 @@ from selenium.webdriver.support import expected_conditions as EC
     ]
 )
 @pytest.mark.scenario
+@pytest.mark.smoke
 def test_login_administration(browser,url, time_wait, my_loger, config, get_page_administration):
     """Тест для login/logout на админку"""
 
@@ -53,6 +54,7 @@ def test_login_administration(browser,url, time_wait, my_loger, config, get_page
     ]
 )
 @pytest.mark.scenario
+@pytest.mark.smoke
 def test_add_delete_product_to_cart(browser,time_wait, url, my_loger, config, path):
     """Тест для добавление\удаления товара в\из корзину\ы"""
 
@@ -93,7 +95,7 @@ def test_add_delete_product_to_cart(browser,time_wait, url, my_loger, config, pa
                 )
                 cart_button.click()
                 break
-            except:
+            except Exception:
                 time.sleep(time_wait)
         # получаем название товара в корзине
         cart_table = WebDriverWait(browser, time_wait).until(
@@ -116,7 +118,7 @@ def test_add_delete_product_to_cart(browser,time_wait, url, my_loger, config, pa
                 )
                 cart_button.click()
                 break
-            except:
+            except Exception:
                 time.sleep(time_wait)
 
         #получаем мэсседж из корзины
@@ -137,7 +139,8 @@ def test_add_delete_product_to_cart(browser,time_wait, url, my_loger, config, pa
     ],
     ids=['home', 'catalog']
 )
-@pytest.mark.scenario1
+@pytest.mark.scenario
+@pytest.mark.smoke
 def test_switch_currency (browser,time_wait, url, my_loger, config, path):
     """Тесты на проверку переключение валюты"""
     my_loger.log_info(test_switch_currency.__doc__)
