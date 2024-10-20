@@ -5,13 +5,14 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-@pytest.mark.smoke
+
 @pytest.mark.parametrize(
     'time_wait',
     [
         (3)
     ]
 )
+@pytest.mark.scenario
 def test_login_administration(browser,url, time_wait, my_loger, config, get_page_administration):
     """Тест для login/logout на админку"""
 
@@ -43,6 +44,7 @@ def test_login_administration(browser,url, time_wait, my_loger, config, get_page
     except Exception as error:
         my_loger.log_error(error)
 
+
 @pytest.mark.parametrize(
     'path,time_wait',
     [
@@ -51,10 +53,10 @@ def test_login_administration(browser,url, time_wait, my_loger, config, get_page
     ]
 )
 @pytest.mark.scenario
-def test_add_product_to_cart(browser,time_wait, url, my_loger, config, path):
+def test_add_delete_product_to_cart(browser,time_wait, url, my_loger, config, path):
     """Тест для добавление\удаления товара в\из корзину\ы"""
 
-    my_loger.log_info(test_add_product_to_cart.__doc__)
+    my_loger.log_info(test_add_delete_product_to_cart.__doc__)
     browser.get(f'{url}{path}/')
     browser.delete_all_cookies()
     time.sleep(1)
@@ -122,10 +124,63 @@ def test_add_product_to_cart(browser,time_wait, url, my_loger, config, path):
             EC.presence_of_element_located((By.XPATH, '//li[@class="text-center p-4"]'))
         ).text
         assert text_cart == 'Your shopping cart is empty!'
-        time.sleep(5)
-
 
     except Exception as error:
         my_loger.log_error(error)
 
 
+@pytest.mark.parametrize(
+    'path,time_wait',
+    [
+        ('',3),
+        ('en-gb/catalog/desktops',3),
+    ],
+    ids=['home', 'catalog']
+)
+@pytest.mark.scenario1
+def test_switch_currency (browser,time_wait, url, my_loger, config, path):
+    """Тесты на проверку переключение валюты"""
+    my_loger.log_info(test_switch_currency.__doc__)
+    browser.get(f'{url}{path}')
+
+    #узнаем текущую валюту, например $
+    now_currency = WebDriverWait(browser, time_wait).until(
+        EC.presence_of_element_located((By.XPATH,'//strong'))
+    ).text
+
+    #узнаем цену товара
+    price_product = WebDriverWait(browser, time_wait).until(
+        EC.presence_of_element_located((By.XPATH, '//span[@class="price-new"]'))
+    ).text
+
+    assert now_currency in price_product
+
+    #кликаем на выплывающий список с валютами
+    list_inline = WebDriverWait(browser, time_wait).until(
+        EC.element_to_be_clickable((By.XPATH, '//ul[@class="list-inline"]'))
+    )
+    list_inline.click()
+
+    #получаем список валют и выбираем другую валюту
+    list_currency = WebDriverWait(browser, time_wait).until(
+        EC.presence_of_all_elements_located((By.XPATH, '//ul[@class="dropdown-menu show"]/li/a'))
+    )
+
+    for cur in list_currency:
+
+        if now_currency not in cur.text:
+            next_currency = cur.text
+            cur.click()
+            break
+
+    # узнаем текущую валюту, цену товара и сравниваем с выбранной
+    now_currency = WebDriverWait(browser, time_wait).until(
+        EC.presence_of_element_located((By.XPATH, '//strong'))
+    ).text
+
+    price_product = WebDriverWait(browser, time_wait).until(
+        EC.presence_of_element_located((By.XPATH, '//span[@class="price-new"]'))
+    ).text
+
+    assert now_currency in next_currency
+    assert now_currency in price_product

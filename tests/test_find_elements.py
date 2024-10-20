@@ -6,6 +6,31 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 
+# @pytest.mark.smoke
+# def test_stepik(browser):
+#     browser.get('https://parsinger.ru/selenium/5.5/4/1.html')
+#
+#     list_div = browser.find_elements(By.XPATH, '//div[@class="parent"]')
+#     result = 0
+#     for div in list_div:
+#         gray = div.find_element(By.XPATH,'textarea[@color="gray"]')
+#         text_gray = gray.text
+#         gray.clear()
+#         blue = div.find_element(By.XPATH, 'textarea[@color="blue"]')
+#         blue.send_keys(text_gray)
+#         button = div.find_element(By.XPATH,'button')
+#         button.click()
+#         # time.sleep(1)
+#     check = browser.find_element(By.XPATH, '//button[@id="checkAll"]')
+#     check.click()
+#     time.sleep(20)
+
+
+
+
+
+
+
 @pytest.mark.find_element
 @pytest.mark.parametrize(
     'locator,selector,time_wait',
