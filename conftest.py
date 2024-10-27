@@ -19,7 +19,7 @@ def pytest_addoption(parser):
                      help="Браузер для запуска тестов")
     parser.addoption("--url", action="store", default="http://10.0.2.15:8081/",
                      help=" Url  сервиса")
-    parser.addoption("--log_level", action="store", default="debug",
+    parser.addoption("--log_level", action="store", default="info",
                      help="Уровень логирования")
 
 
