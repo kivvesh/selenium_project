@@ -24,3 +24,7 @@ class CatalogPage(BasePage):
         self.click_after_detect_element((By.XPATH, '//div[@class="dropdown d-grid"]/button'), timeout)
         text_cart = self.get_element((By.XPATH, '//li[@class="text-center p-4"]'),timeout).text
         assert text_cart == 'Your shopping cart is empty!'
+        self.logger.info('Товар удален из корзины корзину')
+
+    def get_price_product(self, locator, timeout):
+        return self.get_element(locator, timeout).text

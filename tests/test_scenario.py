@@ -7,6 +7,7 @@ from selenium.webdriver.support import expected_conditions as EC
 
 from pages.administration import AdministrationPage
 from pages.catalog import CatalogPage
+from pages.header import HeaderPage
 
 
 @pytest.mark.parametrize(
@@ -35,7 +36,7 @@ def test_login_administration(browser, url, time_wait, my_logger, config):
         ('en-gb/catalog/tablet',3)
     ]
 )
-@pytest.mark.scenario1
+@pytest.mark.scenario
 @pytest.mark.smoke
 def test_add_delete_product_to_cart(browser, time_wait, url, my_logger, config, path):
     """Тест для добавление\удаления товара в\из корзину\ы"""
@@ -59,49 +60,40 @@ def test_add_delete_product_to_cart(browser, time_wait, url, my_logger, config, 
 )
 @pytest.mark.scenario
 @pytest.mark.smoke
-def test_switch_currency (browser,time_wait, url, my_loger, config, path):
+def test_switch_currency(browser,time_wait, url, my_logger, config, path):
     """Тесты на проверку переключение валюты"""
-    my_loger.log_info(test_switch_currency.__doc__)
+    my_logger.info(test_switch_currency.__doc__)
     browser.get(f'{url}{path}')
 
-    #узнаем текущую валюту, например $
-    now_currency = WebDriverWait(browser, time_wait).until(
-        EC.presence_of_element_located((By.XPATH,'//strong'))
-    ).text
-
-    #узнаем цену товара
-    price_product = WebDriverWait(browser, time_wait).until(
-        EC.presence_of_element_located((By.XPATH, '//span[@class="price-new"]'))
-    ).text
-
+    page_header = HeaderPage(browser, my_logger)
+    now_currency = page_header.get_now_currency(time_wait)
+    page_catalog = CatalogPage(browser, my_logger)
+    price_product = page_catalog.get_price_product((By.XPATH, '//span[@class="price-new"]'), time_wait)
     assert now_currency in price_product
 
-    #кликаем на выплывающий список с валютами
-    list_inline = WebDriverWait(browser, time_wait).until(
-        EC.element_to_be_clickable((By.XPATH, '//ul[@class="list-inline"]'))
-    )
-    list_inline.click()
+    page_header.switch_currency(now_currency, time_wait)
+    after_currency = page_header.get_now_currency(time_wait)
+    price_product = page_catalog.get_price_product((By.XPATH, '//span[@class="price-new"]'), time_wait)
+    assert after_currency in price_product
+    assert after_currency != now_currency
 
-    #получаем список валют и выбираем другую валюту
-    list_currency = WebDriverWait(browser, time_wait).until(
-        EC.presence_of_all_elements_located((By.XPATH, '//ul[@class="dropdown-menu show"]/li/a'))
-    )
 
-    for cur in list_currency:
+@pytest.mark.scenario
+@pytest.mark.smoke
+def test_add_product_in_administration(browser, url, my_logger, config):
+    """Тест на проверку добавления товара в админке"""
+    my_logger.info(test_add_product_in_administration.__doc__)
+    browser.get(f'{url}{AdministrationPage.PATH}')
+    page = AdministrationPage(browser, my_logger)
+    page.login(config.get('admin_username'), config.get('admin_password'), 1)
+    page.add_product(product=config.get('product'))
 
-        if now_currency not in cur.text:
-            next_currency = cur.text
-            cur.click()
-            break
-
-    # узнаем текущую валюту, цену товара и сравниваем с выбранной
-    now_currency = WebDriverWait(browser, time_wait).until(
-        EC.presence_of_element_located((By.XPATH, '//strong'))
-    ).text
-
-    price_product = WebDriverWait(browser, time_wait).until(
-        EC.presence_of_element_located((By.XPATH, '//span[@class="price-new"]'))
-    ).text
-
-    assert now_currency in next_currency
-    assert now_currency in price_product
+@pytest.mark.scenario
+@pytest.mark.smoke
+def test_delete_product_in_administration(browser, url, my_logger, config):
+    """Тест на проверку удаления товара из админки"""
+    my_logger.info(test_add_product_in_administration.__doc__)
+    browser.get(f'{url}{AdministrationPage.PATH}')
+    page = AdministrationPage(browser, my_logger)
+    page.login(config.get('admin_username'), config.get('admin_password'), 1)
+    page.delete_product()

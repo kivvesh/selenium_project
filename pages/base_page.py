@@ -26,6 +26,7 @@ class BasePage:
         elements = WebDriverWait(self.browser, timeout).until(EC.visibility_of_all_elements_located(locator))
         if len(elements) > 0:
             self.logger.debug(f'{self.__class__.__doc__} Элементы с локатором {locator} найдены')
+            return elements
         else:
             self.logger.error(f'{self.__class__.__doc__} Элементы с локатором {locator} не найдены')
 
