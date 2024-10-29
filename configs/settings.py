@@ -3,9 +3,15 @@ settings = {
     'admin_username': 'user',
     'admin_password': 'bitnami',
     "product": {
-        "product_name": "auto_test",
-        "tag":"auto_test",
-        "model":"auto_test",
-        "seo":"auto_test",
+        "product_name": "auto1_test1",
+        "tag":"auto_test1",
+        "model":"auto_test1",
+        "seo":"auto1_test1",
+    },
+    "new_user":{
+        "first_name":"test",
+        "last_name":"test",
+        "email":"test100@mail.ru",
+        "password":"test123.",
     }
 }

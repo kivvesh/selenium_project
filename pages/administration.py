@@ -56,7 +56,7 @@ class AdministrationPage(BasePage):
             self.scroll_to_y(0)
             self.get_element((By.XPATH, '//div[@class="float-end"]/button'), 3).click()
 
-            self.logger.error(f'Товар добавлен в админке')
+            self.logger.info(f'Товар добавлен в админке')
         except Exception as error:
             self.logger.error(f'Товар не добавлен в админке {error}')
 
@@ -70,7 +70,7 @@ class AdministrationPage(BasePage):
             self.get_element((By.XPATH, '//div[@class="float-end"]/button[3]'), 3).click()
             self.browser.switch_to.alert.accept()
 
-            self.logger.error(f'Товар удален в админке')
+            self.logger.info(f'Товар удален в админке')
 
         except Exception as error:
             self.logger.error(f'Товар не удален в админке{error}')

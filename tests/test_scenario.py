@@ -8,6 +8,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from pages.administration import AdministrationPage
 from pages.catalog import CatalogPage
 from pages.header import HeaderPage
+from pages.register_user import RegisterUserPage
+from tests.test_find_elements import test_register_user
 
 
 @pytest.mark.parametrize(
@@ -88,6 +90,7 @@ def test_add_product_in_administration(browser, url, my_logger, config):
     page.login(config.get('admin_username'), config.get('admin_password'), 1)
     page.add_product(product=config.get('product'))
 
+
 @pytest.mark.scenario
 @pytest.mark.smoke
 def test_delete_product_in_administration(browser, url, my_logger, config):
@@ -97,3 +100,13 @@ def test_delete_product_in_administration(browser, url, my_logger, config):
     page = AdministrationPage(browser, my_logger)
     page.login(config.get('admin_username'), config.get('admin_password'), 1)
     page.delete_product()
+
+
+@pytest.mark.scenario
+@pytest.mark.smoke
+def test_register_new_user(browser, url, my_logger, config):
+    """Тест на проверку регистрации нового пользователя"""
+    my_logger.info(test_register_new_user.__doc__)
+    browser.get(url)
+    page = RegisterUserPage(browser, my_logger)
+    page.register_new_user(config.get('new_user'))
