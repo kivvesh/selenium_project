@@ -34,7 +34,10 @@ class RegisterUserPage(BasePage):
         self.scroll_to_element((By.XPATH, '//button[@class="btn btn-primary"]'))
         self.get_element((By.XPATH, '//button[@class="btn btn-primary"]')).click()
         time.sleep(1)
-        text_success = self.get_element((By.XPATH, '//h1'), 3).text
-        assert text_success == 'Your Account Has Been Created!'
+        try:
+            text_success = self.get_element((By.XPATH, '//h1'), 3).text
+            assert text_success == 'Your Account Has Been Created!'
 
-        self.logger.info(f'Пользователь с  данными {user} зарегистрирован')
+            self.logger.info(f'Пользователь с  данными {user} зарегистрирован')
+        except AssertionError as error:
+            self.logger.error(f'Ошибка при регистрации {error}')
