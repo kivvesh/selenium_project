@@ -8,7 +8,7 @@ from configs.settings import settings
 
 
 class Logger:
-    def __init__(self, level):
+    def __init__(self,name, level):
         file_path = os.path.join(ROOT_DIR, 'logs', f'{datetime.now().date()}.log')
         os.makedirs(os.path.dirname(file_path), exist_ok=True)
         log_level = {
@@ -19,7 +19,7 @@ class Logger:
         }.get(level.upper(), logging.DEBUG)
 
         # Настройка логирования
-        self.logger = logging.getLogger()
+        self.logger = logging.getLogger(name)
         self.logger.setLevel(log_level)
 
         # Проверка наличия обработчиков
@@ -41,16 +41,20 @@ class Logger:
             # console_handler.setFormatter(formatter)
             # self.logger.addHandler(console_handler)
 
-    def log_info(self, message):
-        self.logger.info(message)
+    def get_logger(self):
+        """Возвращает настроенный логгер."""
+        return self.logger
 
-    def log_error(self, message):
-        self.logger.error(message)
+    # def log_info(self, message):
+    #     self.logger.info(message)
+    #
+    # def log_error(self, message):
+    #     self.logger.error(message)
+    #
+    # def log_warning(self, message):
+    #     self.logger.warning(message)
+    #
+    # def log_debug(self, message):
+    #     self.logger.debug(message)
 
-    def log_warning(self, message):
-        self.logger.warning(message)
-
-    def log_debug(self, message):
-        self.logger.debug(message)
-
-my_logger = Logger(settings.get('log_level'))
+# my_logger = Logger(settings.get('log_level'))
