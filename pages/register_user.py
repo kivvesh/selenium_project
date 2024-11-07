@@ -1,4 +1,5 @@
 import time
+import allure
 
 from selenium.webdriver.common.by import By
 
@@ -6,7 +7,7 @@ from pages.base_page import BasePage
 
 
 class RegisterUserPage(BasePage):
-    """Страница регистрации пользователя"""
+    @allure.step('Регистрация нового пользователя')
     def register_new_user(self, user: dict):
         self.get_element((By.XPATH, '//div[@class="nav float-end"]//i[@class="fa-solid fa-caret-down"]')).click()
         self.click_after_detect_element((By.XPATH, '//ul[@class="dropdown-menu dropdown-menu-right show"]/li[1]'))

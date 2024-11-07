@@ -1,5 +1,6 @@
 import time
 import pytest
+import allure
 
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -18,6 +19,10 @@ from tests.test_find_elements import test_register_user
         (3)
     ]
 )
+@allure.epic('Тестирование opencart')
+@allure.feature('e-2-e тестирование')
+@allure.story('Админка')
+@allure.title('login/logout в админку')
 @pytest.mark.scenario
 @pytest.mark.smoke
 def test_login_administration(browser, url, time_wait, my_logger, config):
@@ -38,6 +43,10 @@ def test_login_administration(browser, url, time_wait, my_logger, config):
         ('en-gb/catalog/tablet',3)
     ]
 )
+@allure.epic('Тестирование opencart')
+@allure.feature('e-2-e тестирование')
+@allure.story('Корзина')
+@allure.title('добавление\удаления товара в\из корзину\ы')
 @pytest.mark.scenario
 @pytest.mark.smoke
 def test_add_delete_product_to_cart(browser, time_wait, url, my_logger, config, path):
@@ -60,6 +69,10 @@ def test_add_delete_product_to_cart(browser, time_wait, url, my_logger, config, 
     ],
     ids=['home', 'catalog']
 )
+@allure.epic('Тестирование opencart')
+@allure.feature('e-2-e тестирование')
+@allure.story('Верхняя панель')
+@allure.title('Переключение валюты')
 @pytest.mark.scenario
 @pytest.mark.smoke
 def test_switch_currency(browser,time_wait, url, my_logger, config, path):
@@ -80,6 +93,10 @@ def test_switch_currency(browser,time_wait, url, my_logger, config, path):
     assert after_currency != now_currency
 
 
+@allure.epic('Тестирование opencart')
+@allure.feature('e-2-e тестирование')
+@allure.story('Админка')
+@allure.title('Добавление товара')
 @pytest.mark.scenario
 @pytest.mark.smoke
 def test_add_product_in_administration(browser, url, my_logger, config):
@@ -91,6 +108,10 @@ def test_add_product_in_administration(browser, url, my_logger, config):
     page.add_product(product=config.get('product'))
 
 
+@allure.epic('Тестирование opencart')
+@allure.feature('e-2-e тестирование')
+@allure.story('Админка')
+@allure.title('Удаление товара')
 @pytest.mark.scenario
 @pytest.mark.smoke
 def test_delete_product_in_administration(browser, url, my_logger, config):
@@ -102,6 +123,10 @@ def test_delete_product_in_administration(browser, url, my_logger, config):
     page.delete_product()
 
 
+@allure.epic('Тестирование opencart')
+@allure.feature('e-2-e тестирование')
+@allure.story('Страница регистрации')
+@allure.title('Регистрация нового пользователя')
 @pytest.mark.scenario
 @pytest.mark.smoke
 def test_register_new_user(browser, url, my_logger, config):

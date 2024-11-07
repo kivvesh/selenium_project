@@ -1,4 +1,5 @@
 import time
+import allure
 
 from selenium.webdriver.common.by import By
 
@@ -6,8 +7,8 @@ from pages.base_page import BasePage
 
 
 class AdministrationPage(BasePage):
-    """Страница Админки /administration"""
     PATH = "administration"
+    @allure.step('login в админки')
     def login(self, username, password, time_wait):
         try:
             self.get_element((By.XPATH,'//input[@name="username"]'),time_wait).send_keys(username)
@@ -16,14 +17,26 @@ class AdministrationPage(BasePage):
             self.logger.info(f'{self.__class__.__doc__} Login with username = {username} and password = {password}')
         except Exception as error:
             self.logger.error(f'{self.__class__.__doc__} Login with username = {username} and password = {password}\n{error}')
+            allure.attach(
+                self.browser.get_screenshot_as_png(),
+                name='screenshot_error',
+                attachment_type=allure.attachment_type.PNG
+            )
 
+    @allure.step('logout в админки')
     def logout(self, time_wait):
         try:
             self.click_element((By.XPATH,'//li[@id="nav-logout"]/a'),time_wait)
             self.logger.info(f'{self.__class__.__doc__} Logout')
         except Exception as error:
             self.logger.error(f'{self.__class__.__doc__} Logout\n{error}')
+            allure.attach(
+                self.browser.get_screenshot_as_png(),
+                name='screenshot_error',
+                attachment_type=allure.attachment_type.PNG
+            )
 
+    @allure.step('Добавление товара в админки')
     def add_product(self, product):
         try:
             self.get_element((By.XPATH, '//i[@class="fa-solid fa-bars"]'), 3).click()
@@ -59,7 +72,13 @@ class AdministrationPage(BasePage):
             self.logger.info(f'Товар добавлен в админке')
         except Exception as error:
             self.logger.error(f'Товар не добавлен в админке {error}')
+            allure.attach(
+                self.browser.get_screenshot_as_png(),
+                name='screenshot_error',
+                attachment_type=allure.attachment_type.PNG
+            )
 
+    @allure.step('Удаление товара в админки')
     def delete_product(self):
         try:
             self.get_element((By.XPATH, '//i[@class="fa-solid fa-bars"]'), 3).click()
@@ -74,3 +93,8 @@ class AdministrationPage(BasePage):
 
         except Exception as error:
             self.logger.error(f'Товар не удален в админке{error}')
+            allure.attach(
+                self.browser.get_screenshot_as_png(),
+                name='screenshot_error',
+                attachment_type=allure.attachment_type.PNG
+            )
