@@ -4,7 +4,8 @@ import pytest
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-
+from selenium.webdriver.chrome.options import Options as ChromeOptions
+from selenium.webdriver.firefox.options import Options as FirefoxOptions
 from configs.settings import settings
 from core.logger import Logger
 
@@ -21,6 +22,12 @@ def pytest_addoption(parser):
                      help=" Url  сервиса")
     parser.addoption("--log_level", action="store", default="info",
                      help="Уровень логирования")
+    parser.addoption("--headless", action="store", default=False,
+                     help="Запуск в фоновом режиме")
+    parser.addoption("--selenoid", action="store", default=False,
+                     help="Запуск на selenoid")
+    parser.addoption("--executer", action="store", default='http://localhost:4444/',
+                     help="URL selenoid")
 
 
 @pytest.fixture(scope='session', autouse=True)
@@ -36,11 +43,33 @@ def url(request):
 
 @pytest.fixture(scope='session')
 def browser(url, request):
-    browser_name = request.config.getoption("--browser", default="chrome")
+    browser_name = request.config.getoption("--browser")
+    headless = request.config.getoption("--headless")
+    executer = request.config.getoption("--executer")
+    executer_url = f'{executer}wd/hub'
+    if request.config.getoption('--selenoid'):
+        if browser_name == 'chrome':
+            options = ChromeOptions()
+        elif browser_name == 'firefox':
+            options = FirefoxOptions()
+        if headless:
+            options.add_argument('--headless=new')
 
-    driver = BROWSERS.get(browser_name)()
+        caps = {
+            "browserName": browser_name
+        }
+        for key, value in caps.items():
+            options.set_capability(key, value)
+
+        driver = webdriver.Remote(
+            command_executor=executer_url,
+            options=options
+        )
+    else:
+        driver = BROWSERS.get(browser_name)()
+
     driver.implicitly_wait(1)
-    driver.get(url)
+
     yield driver
 
     driver.quit()
