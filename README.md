@@ -1,5 +1,10 @@
 # selenium_project
 
+## Запуск с помощью selenoid
+
+`pytest -m scenario --selenoid=True --browser=chrome --browser_version=127`
+
+
 ## 1 часть
 * Реализована передача браузера через параметр --browser и базовый url через --url
 * Конструкция в фикстуре browser через yield закрывает браузер по завершению тестов
