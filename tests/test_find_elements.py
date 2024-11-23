@@ -1,8 +1,7 @@
 import pytest
+import allure
 
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 
 from pages.main_page import MainPage
 from pages.catalog import CatalogPage
@@ -22,6 +21,10 @@ from pages.register_user import RegisterUserPage
         ((By.CSS_SELECTOR,'div.row.row-cols-1.row-cols-sm-2.row-cols-md-3.row-cols-xl-4'),3)
     ]
 )
+@allure.epic('Тестирование opencart')
+@allure.feature('Поиск элемента')
+@allure.story('Главная страница')
+@allure.title('локатор {locator}')
 def test_main_page(browser, url, locator, time_wait, my_logger):
     """Тесты для поиска элементов главной странице"""
     my_logger.info(f'{test_main_page.__doc__} с локатором {locator}')
@@ -42,6 +45,10 @@ def test_main_page(browser, url, locator, time_wait, my_logger):
         ('desktops/mac', (By.XPATH,'//a[@class="btn btn-primary d-block"]'),3),
     ]
 )
+@allure.epic('Тестирование opencart')
+@allure.feature('Поиск элемента')
+@allure.story('Каталог')
+@allure.title('локатор {locator}')
 def test_catalog(browser, url, locator, endpoint,time_wait, my_logger):
     """Тесты для поиска элементов в каталоге"""
     my_logger.info(f'{test_catalog.__doc__} с локатором {locator}')
@@ -65,6 +72,10 @@ def test_catalog(browser, url, locator, endpoint,time_wait, my_logger):
     ],
     ids=['Title','Price','Description','In like', 'Add to cart']
 )
+@allure.epic('Тестирование opencart')
+@allure.feature('Поиск элемента')
+@allure.story('Карточка товара')
+@allure.title('локатор {locator}')
 def test_cart(browser, url, locator, endpoint, time_wait, my_logger):
     """Тесты для поиска элементов в карточке товара"""
     my_logger.info(f'{test_cart.__doc__} с локатором {locator}')
@@ -85,6 +96,10 @@ def test_cart(browser, url, locator, endpoint, time_wait, my_logger):
         ((By.XPATH,'//footer[@id="footer"]/a'),3),
     ]
 )
+@allure.epic('Тестирование opencart')
+@allure.feature('Поиск элемента')
+@allure.story('Админка')
+@allure.title('локатор {locator}')
 def test_administration(browser, url, locator, time_wait, my_logger):
     """Тесты для поиска элементов /administration"""
     my_logger.info(test_administration.__doc__)
@@ -107,6 +122,10 @@ def test_administration(browser, url, locator, time_wait, my_logger):
     ],
     ids=['firstname','lastname','email','column-right','button']
 )
+@allure.epic('Тестирование opencart')
+@allure.feature('Поиск элемента')
+@allure.story('Страница регистрации')
+@allure.title('локатор {locator}')
 def test_register_user(browser, url, locator, time_wait, my_logger):
     """Тесты для поиска элементов на index.php?route=account/register"""
     my_logger.info(test_register_user.__doc__)

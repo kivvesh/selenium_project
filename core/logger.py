@@ -35,26 +35,6 @@ class Logger:
             # Добавление обработчика к логгеру
             self.logger.addHandler(file_handler)
 
-            #вывод в консоль
-            # console_handler = logging.StreamHandler()
-            # console_handler.setLevel(log_level)
-            # console_handler.setFormatter(formatter)
-            # self.logger.addHandler(console_handler)
-
     def get_logger(self):
         """Возвращает настроенный логгер."""
         return self.logger
-
-    # def log_info(self, message):
-    #     self.logger.info(message)
-    #
-    # def log_error(self, message):
-    #     self.logger.error(message)
-    #
-    # def log_warning(self, message):
-    #     self.logger.warning(message)
-    #
-    # def log_debug(self, message):
-    #     self.logger.debug(message)
-
-# my_logger = Logger(settings.get('log_level'))
