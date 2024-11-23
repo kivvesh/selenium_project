@@ -28,6 +28,9 @@ def pytest_addoption(parser):
                      help="Запуск на selenoid")
     parser.addoption("--executer", action="store", default='http://localhost:4444/',
                      help="URL selenoid")
+    parser.addoption("--browser_version", action="store", default='128',
+                     help="URL selenoid")
+
 
 
 @pytest.fixture(scope='session', autouse=True)
@@ -46,6 +49,7 @@ def browser(url, request):
     browser_name = request.config.getoption("--browser")
     headless = request.config.getoption("--headless")
     executer = request.config.getoption("--executer")
+    browser_version = request.config.getoption("--browser_version")
     executer_url = f'{executer}wd/hub'
     if request.config.getoption('--selenoid'):
         if browser_name == 'chrome':
@@ -56,7 +60,13 @@ def browser(url, request):
             options.add_argument('--headless=new')
 
         caps = {
-            "browserName": browser_name
+            "browserName": browser_name,
+            "browserVersion": f"{browser_version}.0",
+            "selenoid:options": {
+                "enableLog": False,
+                "name":request.node.name,
+                "enableVideo": True
+            }
         }
         for key, value in caps.items():
             options.set_capability(key, value)
