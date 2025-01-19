@@ -1,5 +1,10 @@
 # selenium_project
 
+## Запуск тестов в контейнере
+
+1. `docker build -t tests .` собираем образ
+2. `docker run -it tests -m scenario --browser firefox` запускам контейнер с тестами
+
 ## Запуск с помощью selenoid
 
 `pytest -m scenario --selenoid=True --browser=chrome --browser_version=127`

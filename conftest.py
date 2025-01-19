@@ -1,3 +1,4 @@
+import tempfile
 from tracemalloc import Trace
 
 import pytest
@@ -22,7 +23,7 @@ def pytest_addoption(parser):
                      help=" Url  сервиса")
     parser.addoption("--log_level", action="store", default="info",
                      help="Уровень логирования")
-    parser.addoption("--headless", action="store", default=False,
+    parser.addoption("--headless", action="store", default=True,
                      help="Запуск в фоновом режиме")
     parser.addoption("--selenoid", action="store", default=False,
                      help="Запуск на selenoid")
@@ -51,14 +52,19 @@ def browser(url, request):
     executer = request.config.getoption("--executer")
     browser_version = request.config.getoption("--browser_version")
     executer_url = f'{executer}wd/hub'
-    if request.config.getoption('--selenoid'):
-        if browser_name == 'chrome':
-            options = ChromeOptions()
-        elif browser_name == 'firefox':
-            options = FirefoxOptions()
-        if headless:
-            options.add_argument('--headless=new')
+    if browser_name == 'chrome':
+        options = ChromeOptions()
+        user_data_dir = tempfile.mkdtemp()
+        options.add_argument(f"--user-data-dir={user_data_dir}")
 
+    elif browser_name == 'firefox':
+        options = FirefoxOptions()
+    if headless:
+        options.add_argument('--headless')
+        options.add_argument('--no-sandbox')
+        options.add_argument('--disable-dev-shm-usage')
+
+    if request.config.getoption('--selenoid'):
         caps = {
             "browserName": browser_name,
             "browserVersion": f"{browser_version}.0",
@@ -76,7 +82,7 @@ def browser(url, request):
             options=options
         )
     else:
-        driver = BROWSERS.get(browser_name)()
+        driver = BROWSERS.get(browser_name)(options=options)
 
     driver.implicitly_wait(1)
 
