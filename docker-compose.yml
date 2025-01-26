@@ -1,0 +1,98 @@
+version: '3.8'
+
+services:
+  phpadmin:
+    image: 'phpmyadmin/phpmyadmin:latest'
+    environment:
+      - PMA_HOST=mariadb
+      - PMA_PORT=3306
+      - PMA_USER=bn_opencart
+    ports:
+      - '${PHPADMIN_PORT}:80'
+    networks:
+      - app-network
+
+  mariadb:
+    image: docker.io/bitnami/mariadb:11.2
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - MARIADB_USER=bn_opencart
+      - MARIADB_DATABASE=bitnami_opencart
+    volumes:
+      - 'mariadb_data:/bitnami/mariadb'
+    ports:
+      - '3306:3306'
+    networks:
+      - app-network
+
+  opencart:
+    image: docker.io/bitnami/opencart:4.0.2-3
+    ports:
+      - '${OPENCART_PORT}:8080'
+      - '443:8443'
+    environment:
+      - OPENCART_HOST=${LOCAL_IP}:${OPENCART_PORT}
+      - OPENCART_DATABASE_HOST=mariadb  # Используйте имя сервиса
+      - OPENCART_DATABASE_PORT_NUMBER=3306
+      - OPENCART_DATABASE_USER=bn_opencart
+      - OPENCART_DATABASE_NAME=bitnami_opencart
+      - ALLOW_EMPTY_PASSWORD=yes
+    volumes:
+      - 'opencart_data:/bitnami/opencart'
+      - 'opencart_storage_data:/bitnami/opencart_storage/'
+    depends_on:
+      - mariadb
+    networks:
+      - app-network
+
+  selenoid:
+    image: aerokube/selenoid:latest-release
+    container_name: selenoid
+    ports:
+      - "4444:4444"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "./selenoid_config/:/etc/selenoid/"
+    restart: always
+    depends_on:
+      - opencart
+    command: ["-limit", "10", "-timeout", "1m0s", "-conf", "/etc/selenoid/browsers.json","-container-network", "app-network"]
+    networks:
+      - app-network
+
+  selenoid-ui:
+    image: aerokube/selenoid-ui:latest-release
+    container_name: selenoid-ui
+    ports:
+      - "8080:8080"
+    depends_on:
+      - selenoid
+    command: ["--selenoid-uri", "http://selenoid:4444"]
+    networks:
+      - app-network
+
+  test_ui:
+    build:
+      context: .
+      dockerfile: DockerfileTest
+    container_name: test_ui
+    depends_on:
+      - selenoid-ui
+      - opencart
+    environment:
+      - SELENOID_URL=http://selenoid:4444/wd/hub
+    networks:
+      - app-network
+
+volumes:
+  mariadb_data:
+    driver: local
+  opencart_data:
+    driver: local
+  opencart_storage_data:
+    driver: local
+
+networks:
+  app-network:
+    driver: bridge
+    name: app-network

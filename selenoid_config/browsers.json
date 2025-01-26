@@ -1,0 +1,13 @@
+{
+   "chrome": {
+       "default": "114",
+       "versions": {
+           "114": {
+               "port": "4444",
+               "image": "selenoid/vnc_chrome:114.0",
+               "env" : ["LANG=en_US.UTF-8", "LANGUAGE=en_US.UTF-8", "LC_ALL=en_US.UTF-8"],
+               "additionalNetworks": ["ui-test_selenoid"]
+           }
+       }
+   }
+}

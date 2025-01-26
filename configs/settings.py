@@ -1,3 +1,8 @@
+import os
+import subprocess
+
+print(os.listdir())
+
 settings = {
     'log_level': 'DEBUG',
     'admin_username': 'user',
