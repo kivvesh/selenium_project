@@ -1,0 +1,20 @@
+FROM python:3.11-slim
+
+RUN apt-get update && apt-get install -y \
+    netcat-openbsd \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Установка необходимых зависимостей
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY wait-for-it.sh /usr/local/bin/wait-for-it
+RUN chmod +x /usr/local/bin/wait-for-it
+
+# Копирование тестов в контейнер
+COPY . /pytest_app
+WORKDIR /pytest_app
+
+
+ENTRYPOINT ["/usr/local/bin/wait-for-it", "opencart", "8080", "--"]
+CMD ["pytest", "--headless=True", "--selenoid=True", "--url=http://opencart:8080/"]

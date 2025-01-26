@@ -1,5 +1,10 @@
 # selenium_project
 
+## Для запуска всервиса opencart, selenoid и тестов через docker-compose необходимо 
+
+1. `hostname -I | awk '{print $1}'` - выясняем локальный ip
+2. `OPENCART_PORT=8081 PHPADMIN_PORT=8888 LOCAL_IP=10.0.2.15 docker compose up` - запускаем контейнеры заменив LOCAL_IP на свой
+
 ## Запуск тестов в контейнере
 
 1. `docker build -t tests .` собираем образ

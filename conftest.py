@@ -27,7 +27,7 @@ def pytest_addoption(parser):
                      help="Запуск в фоновом режиме")
     parser.addoption("--selenoid", action="store", default=False,
                      help="Запуск на selenoid")
-    parser.addoption("--executer", action="store", default='http://localhost:4444/',
+    parser.addoption("--executer", action="store", default='http://selenoid:4444/',
                      help="URL selenoid")
     parser.addoption("--browser_version", action="store", default='128',
                      help="URL selenoid")
@@ -67,11 +67,9 @@ def browser(url, request):
     if request.config.getoption('--selenoid'):
         caps = {
             "browserName": browser_name,
-            "browserVersion": f"{browser_version}.0",
             "selenoid:options": {
                 "enableLog": False,
-                "name":request.node.name,
-                "enableVideo": True
+                "name":request.node.name
             }
         }
         for key, value in caps.items():
