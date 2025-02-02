@@ -1,5 +1,18 @@
 # selenium_project
 
+## CI jenkins
+
+1. `docker build -t -f jenkins/Dockerfile` - собираем образ jenkins с python
+2.  `OPENCART_PORT=8089 PHPADMIN_PORT=8888 LOCAL_IP=10.0.2.15 docker compose up` - запускаем контейнеры Opencart, Selenoid
+3. `docker run -d -p 8082:8080 -p 50000:50000 --network app-network myjenkins` - запускаем контейнер myjenkins в сети app-network
+4. настраиваем jenkins, устанавливаем необходимые плагины, включая allure
+
+![img.png](images/img.png)
+![img.png](images/img2.png)
+![img.png](images/img3.png)
+
+pytest --headless=True --selenoid=True --url=http://opencart:8080/ --executer=http://selenoid:4444/
+
 ## Для запуска всервиса opencart, selenoid и тестов через docker-compose необходимо 
 
 1. `hostname -I | awk '{print $1}'` - выясняем локальный ip
