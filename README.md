@@ -1,5 +1,12 @@
 # selenium_project
 
+## CI jenkins
+
+1. `docker run -d -p 8082:8080 -p 50000:50000 jenkins/jenkins:lts` - запуск контейнеера jenkins
+2. `docker exec jenkins_container_name cat /var/jenkins_home/secrets/initialAdminPassword` - получить пароль админисратора 889697769f2f4b92800d18459c29ee59
+
+`OPENCART_PORT=8081 PHPADMIN_PORT=8888 HEADLESS=True SELENOID=True URL=http://opencart:8080/ EXECUTER=http://selenoid:4444/ BROWSER=chrome BROWSER_VERSION=128  LOCAL_IP=10.0.2.15 docker compose up`
+
 ## Для запуска всервиса opencart, selenoid и тестов через docker-compose необходимо 
 
 1. `hostname -I | awk '{print $1}'` - выясняем локальный ip
