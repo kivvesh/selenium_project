@@ -71,26 +71,26 @@ services:
     networks:
       - app-network
 
-  test_ui:
-    image: python:3.11-slim  # Используем образ Python
-    volumes:
-      - .:/pytest_app  # Подключение текущей директории
-#    entrypoint: [ "/bin/sh", "-c" ]  # Используем оболочку для выполнения нескольких команд
-    command: >
-      /bin/sh -c "pip install -r requirements.txt && 
-       pytest --headless=${HEADLESS} --selenoid=${SELENOID} --url=${URL} --browser_version=${BROWSER_VERSION} --executer=${EXECUTER}"
-    depends_on:
-      - opencart  # Зависимость от сервиса OpenCart
-    working_dir: /pytest_app  # Установка рабочего каталога
-    networks:
-      - app-network
-    environment:
-      HEADLESS: "True"
-      SELENOID: "True"
-      URL: "http://opencart:8080/"
-      EXECUTER: "http://selenoid:4444/"
+#  test_ui:
+#    image: python:3.11-slim  # Используем образ Python
+#    volumes:
+#      - .:/pytest_app  # Подключение текущей директории
+##    entrypoint: [ "/bin/sh", "-c" ]  # Используем оболочку для выполнения нескольких команд
+#    command: >
+#      /bin/sh -c "pip install -r requirements.txt &&
+#       pytest --headless=${HEADLESS} --selenoid=${SELENOID} --url=${URL} --browser_version=${BROWSER_VERSION} --executer=${EXECUTER}"
+#    depends_on:
+#      - opencart  # Зависимость от сервиса OpenCart
+#    working_dir: /pytest_app  # Установка рабочего каталога
+#    networks:
+#      - app-network
+#    environment:
+#      HEADLESS: "True"
+#      SELENOID: "True"
+#      URL: "http://opencart:8080/"
+#      EXECUTER: "http://selenoid:4444/"
 #      BROWSER: "chrome"
-      BROWSER_VERSION: "128"
+#      BROWSER_VERSION: "128"
 
 
 #  test_ui:
